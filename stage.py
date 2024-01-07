@@ -22,13 +22,7 @@ class Serial:
         while True:
             for i in range(10):
                 try:
-                    self.ser = serial.Serial(
-                        port=f'COM{i}',
-                        baudrate=115200,
-                        parity=serial.PARITY_NONE,
-                        bytesize=serial.EIGHTBITS,
-                        stopbits=serial.STOPBITS_ONE
-                    )
+                    self.ser = serial.Serial(port=f'dev/ttyUSB0', baudrate=9600)
                     if self.ser.is_open:
                         print(f'connection on COM{i}.')
                     else:
