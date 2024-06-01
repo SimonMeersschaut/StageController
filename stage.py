@@ -22,9 +22,15 @@ class Serial:
         while True:
             for i in range(10):
                 try:
-                    self.ser = serial.Serial(port=f'dev/ttyUSB0', baudrate=9600)
+                    self.ser = serial.Serial(
+                        port=f'/dev/ttyUSB0',
+                        baudrate=9600,
+                        parity=serial.PARITY_NONE,
+                        bytesize=serial.EIGHTBITS,
+                        stopbits=serial.STOPBITS_ONE
+                    )
                     if self.ser.is_open:
-                        print(f'connection on COM{i}.')
+                        print(f'connected with controller.')
                     else:
                         input('unexpected error')
                     return  # success!
@@ -70,19 +76,26 @@ class Serial:
         return response
 
 if __name__ == '__main__':
+    print(0)
     s = Serial()
+    print(1)
     s.send('XS')
-
-    # set the status of the motor
+    print(1.5)
+    button = Button(2)
+    print(2)
+    #set the status of the motor
     rotating = False
 
     while True:
+        print('Waiting for button press')
         button.wait_for_press()
+        print('Button pressed')
         if rotating:
             s.send('XS')
+            time.sleep(1)
+            s.send('X0-')
             rotating = False
         elif not rotating:
             s.send('XL+')
             rotating = True
-
-
+        time.sleep(1)
